@@ -1,9 +1,10 @@
 from enum import Enum
 from pydantic import BaseModel
+from pydantic.types import UUID4
 
 class Gender(str, Enum):
-    male = "male"
-    female = "female"
+    male = 'male'
+    female = 'female'
 
 class CustomerBase(BaseModel):
     """
@@ -13,11 +14,12 @@ class CustomerBase(BaseModel):
     last_name: str
     age: int
     gender: Gender
-    adult: bool
-    address_id: int
+    address_id: UUID4
 
 class Customer(CustomerBase):
     """
     Customer model including ID.
     """
-    id: int
+    id: UUID4
+    adult: bool
+
