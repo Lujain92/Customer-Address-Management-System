@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from pydantic.types import UUID4
 
 class AddressBase(BaseModel):
     """
@@ -14,4 +15,4 @@ class Address(AddressBase):
     """
     Address model including ID.
     """
-    id: int
+    id: UUID4
