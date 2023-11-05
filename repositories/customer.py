@@ -1,10 +1,10 @@
 from fastapi import  HTTPException
-from repositories.address import fake_address_db
+from database.address_db import fake_address_db
+from database.customer_db import fake_customer_db
 from utils.validator import validate_address_id
 from controllers.models.customer import Customer
 from uuid import uuid4
 
-fake_customer_db = []
 
 def get():
     """
@@ -66,7 +66,7 @@ def delete(id):
     Delete a customer by their ID from the fake_customer_db.
 
     Parameters:
-        id (UUID4): The unique identifier of the customer to be deleted.
+        id (UUID): The unique identifier of the customer to be deleted.
 
     Returns:
         dict: A message indicating the successful deletion of the customer.
@@ -86,7 +86,7 @@ def update(id, updated_customer):
     Update an existing customer with new data based on their ID in the fake_customer_db.
 
     Parameters:
-        id (UUID4): The unique identifier of the customer to be updated.
+        id (UUID): The unique identifier of the customer to be updated.
         updated_customer (Customer): An instance of the Customer model containing updated data for the customer.
 
     Returns:
@@ -113,7 +113,7 @@ def get_address(id):
     Retrieve the address associated with a customer by their ID from the fake_customer_db.
 
     Parameters:
-        id (UUID4): The unique identifier of the customer.
+        id (UUID): The unique identifier of the customer.
 
     Returns:
         dict: Address details as a dictionary.
