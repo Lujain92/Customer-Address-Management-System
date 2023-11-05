@@ -1,8 +1,9 @@
-from fastapi import  HTTPException
+from fastapi import HTTPException
 from controllers.models.address import Address
+from database.address_db import fake_address_db
+from database.customer_db import fake_customer_db
 from uuid import uuid4
 
-fake_address_db = []
 
 def get():
     """
@@ -13,12 +14,13 @@ def get():
     """
     return fake_address_db
 
+
 def get_by_id(id):
     """
     Retrieve an address by its ID from the fake_address_db.
 
     Parameters:
-        id (UUID4): The unique identifier of the address to be retrieved.
+        id (UUID): The unique identifier of the address to be retrieved.
 
     Returns:
         dict: Address details as a dictionary.
@@ -29,8 +31,9 @@ def get_by_id(id):
     for address in fake_address_db:
         if address['id'] == id:
             return address
-        
+
     raise HTTPException(status_code=404, detail='Address not found')
+
 
 def create(address):
     """
@@ -51,12 +54,13 @@ def create(address):
 
     return response
 
+
 def delete(id):
     """
     Delete an address by its ID from the fake_address_db.
 
     Parameters:
-        id (UUID4): The unique identifier of the address to be deleted.
+        id (UUID): The unique identifier of the address to be deleted.
 
     Returns:
         dict: A message indicating the successful deletion of the address.
@@ -64,11 +68,15 @@ def delete(id):
     Raises:
         HTTPException: If the address with the specified ID is not found, a 404 error is raised.
     """
+    for customer in fake_customer_db:
+        if id == customer['address_id']:
+                    return {'message': 'Not allowed'}
+
     for i, address in enumerate(fake_address_db):
         if id == address['id']:
             del fake_address_db[i]
             return {'message': 'Address deleted successfully'}
-        
+
     raise HTTPException(status_code=404, detail='Address not found')
 
 def update(id, updated_address):
@@ -76,7 +84,7 @@ def update(id, updated_address):
     Update an existing address with new data based on its ID in the fake_address_db.
 
     Parameters:
-        id (UUID4): The unique identifier of the address to be updated.
+        id (UUI): The unique identifier of the address to be updated.
         updated_address (Address): An instance of the Address model containing updated data for the address.
 
     Returns:
@@ -93,5 +101,6 @@ def update(id, updated_address):
             fake_address_db[i] = updated_address_data
 
             return {'message': 'Address updated successfully'}
-        
+
     raise HTTPException(status_code=404, detail='Address not found')
+

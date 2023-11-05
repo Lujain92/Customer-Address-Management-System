@@ -1,10 +1,11 @@
 from fastapi import APIRouter
 from controllers.models.customer import Customer, CustomerBase
-from pydantic.types import UUID4
-from repositories.customer import get, get_by_id, create, delete, update, get_address
-router = APIRouter()
+from uuid import UUID
+from repositories import customer
 
-@router.get('/', response_model=list[Customer])
+customer_router = APIRouter()
+
+@customer_router.get('/', response_model=list[Customer])
 def get_all_customers():
     """
     Retrieve a list of all customers.
@@ -12,27 +13,25 @@ def get_all_customers():
     Returns:
         list[Customer]: List of customer objects.
     """
-    result = get()
-    return result 
+    return customer.get() 
     
 
-@router.get('/{customer_id}', response_model=Customer)
-def get_customer(customer_id: UUID4):
+@customer_router.get('/{customer_id}', response_model=Customer)
+def get_customer(customer_id: UUID):
     """
     Retrieve customer information by customer ID.
     
     Args:
-        customer_id (UUID4): The ID of the customer to retrieve.
+        customer_id (UUID): The ID of the customer to retrieve.
     
     Returns:
         Customer: Customer object with the specified ID.
     """
-    result = get_by_id(customer_id)
-    return result
+    return customer.get_by_id(customer_id)
 
 
-@router.post('/', response_model=Customer)
-def create_customer(customer: CustomerBase):
+@customer_router.post('/', response_model=Customer)
+def create_customer(new_customer: CustomerBase):
     """
     Create a new customer.
     
@@ -42,50 +41,47 @@ def create_customer(customer: CustomerBase):
     Returns:
         Customer: Newly created customer object.
     """
-    result = create(customer)
-    return result
+    return customer.create(new_customer)
     
 
-@router.delete('/{customer_id}')
-def delete_customer(customer_id: UUID4):
+@customer_router.delete('/{customer_id}')
+def delete_customer(customer_id: UUID):
     """
     Delete a customer by ID.
     
     Args:
-        customer_id (UUID4): ID of the customer to be deleted.
+        customer_id (UUID): ID of the customer to be deleted.
     
     Returns:
         dict: Success message if the customer is deleted.
     """
-    result = delete(customer_id)
-    return result
+    return customer.delete(customer_id)
 
-@router.put('/{customer_id}')
-def update_customer(customer_id: UUID4, updated_customer: CustomerBase):
+@customer_router.put('/{customer_id}')
+def update_customer(customer_id: UUID, updated_customer: CustomerBase):
     """
     Update customer information by ID.
     
     Args:
-        customer_id (UUID4): ID of the customer to be updated.
+        customer_id (UUID): ID of the customer to be updated.
         updated_customer (CustomerBase): Updated customer data.
     
     Returns:
         dict: Success message if the customer is updated.
     """
-    result = update(customer_id, updated_customer)
-    return result
+    return customer.update(customer_id, updated_customer)
    
 
-@router.get('/{customer_id}/address')
-def get_customer_address(customer_id: UUID4):
+@customer_router.get('/{customer_id}/address')
+def get_customer_address(customer_id: UUID):
     """
     Retrieve the address of a specific customer by customer ID.
 
     Args:
-        customer_id (UUID4): The ID of the customer whose address needs to be retrieved.
+        customer_id (UUID): The ID of the customer whose address needs to be retrieved.
 
     Returns:
         dict: Address information for the specified customer.
     """
-    result = get_address(customer_id)
-    return result
+    return customer.get_address(customer_id)
+

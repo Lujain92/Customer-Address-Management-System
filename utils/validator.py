@@ -12,5 +12,6 @@ def validate_address_id(address_id: int, address_db: List[dict]):
     Raises:
         HTTPException: Raises a 400 Bad Request error if the address_id is not valid.
     """
-    if not any(address["id"] == address_id for address in address_db):
-        raise HTTPException(status_code=400, detail="Invalid address_id provided")
+    if not any(address['id'] == address_id for address in address_db):
+        raise HTTPException(status_code=400, detail='Address not found')
+    
